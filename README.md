@@ -18,12 +18,12 @@ Sebuah website WordPress milik klien (`lspsmkp.id`) tiba-tiba tidak bisa diakses
 ### 2.1 Website tidak bisa diakses
 Mengunjungi `lspsmkp.id/dashboard` menampilkan halaman 404 "Nothing Found" bawaan tema WordPress — menandakan aplikasi web-nya sebenarnya masih berjalan dan melayani halaman, tetapi URL/route yang dituju tidak ditemukan.
 
-![Website menampilkan Nothing Found](assets/01-website-down.png)
+(assets/01-website-down.png)
 
 ### 2.2 Panel manajemen server tidak bisa diakses
 Saat mencoba membuka panel server langsung lewat IP dan port-nya (`194.233.78.61:51623/index.php`), muncul pesan **"Hmmm... can't reach this page"** dengan error `ERR_CONNECTION_TIMED_OUT`.
 
-![Browser timeout saat akses IP server](assets/02-server-login-fail.png)
+(assets/02-server-login-fail.png)
 
 ### 2.3 Pengujian level jaringan memastikan tidak ada respons
 Untuk memastikan apakah ini masalah di level aplikasi atau di level jaringan/konektivitas, dijalankan `Test-NetConnection` dari PowerShell ke IP server pada beberapa port:
@@ -42,7 +42,7 @@ WARNING: TCP connect to (194.233.78.61 : 443) failed
 WARNING: Ping to 194.233.78.61 failed with status: DestinationHostUnreachable
 ```
 
-![Hasil Test-NetConnection PowerShell gagal](assets/03-powershell-test-fail.png)
+(assets/03-powershell-test-fail.png)
 
 **Analisis:** Karena *semua* port yang diuji gagal — bukan hanya port panel saja — dan bahkan ICMP (ping) menghasilkan `DestinationHostUnreachable`, ini menyingkirkan kemungkinan masalah di satu aplikasi/service tertentu (misalnya aturan firewall yang salah untuk satu port saja). Server yang masih bisa dijangkau tapi memfilter trafik biasanya tetap merespons ping meski TCP-nya gagal, atau hanya memblokir port tertentu. Di sini, tidak adanya respons sama sekali di semua protokol dan port mengarah ke **kegagalan konektivitas di layer yang lebih rendah** — yaitu server memang tidak terjangkau sama sekali di jaringan, sesuai dengan ciri masalah kabel/koneksi fisik, bukan kesalahan konfigurasi software atau firewall.
 
@@ -63,12 +63,12 @@ Karena akses lewat software/remote sudah mentok, dilakukan pemeriksaan fisik lan
 ### 4.1 Akses server kembali normal
 phpMyAdmin, yang dilayani lewat panel server, kembali bisa diakses, memastikan koneksi jaringan sudah tersambung lagi.
 
-![phpMyAdmin bisa diakses kembali](assets/04-phpmyadmin-access-restored.png)
+(assets/04-phpmyadmin-access-restored.png)
 
 ### 4.2 Akses website kembali normal
 `lspsmkp.id` kembali bisa dibuka dan menampilkan seluruh konten halaman utamanya dengan baik.
 
-![Website kembali normal](assets/05-website-restored.png)
+(assets/05-website-restored.png)
 
 ---
 
